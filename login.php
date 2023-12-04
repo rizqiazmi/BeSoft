@@ -1,3 +1,9 @@
+<?php
+  // session_start();
+  if(!empty($_SESSION['username_besoft'])){
+    header('location:home');
+  }
+?>
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
 
@@ -9,7 +15,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.118.2">
-    <title>Signin Template · Bootstrap v5.3</title>
+    <title>BeSoft - Aplikasi Pemesanan Makanan Restoran Dine-in</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sign-in/">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -166,19 +172,19 @@
 
 
     <main class="form-signin w-100 m-auto">
-        <form class="needs-validation" novalidate>
+        <form class="needs-validation" novalidate action="proses/proses_login.php" method="POST">
             <i class="bi bi-house fs-1"></i>
             <h1 class="h3 mb-3 fw-normal">Login BeSoft</h1>
 
             <div class="form-floating">
-                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
+                <input name="username" type="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
                 <label for="floatingInput">Email address</label>
                 <div class="invalid-feedback">
                     Masukkan email yang valid.
                 </div>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" required>
+                <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" required>
                 <label for="floatingPassword">Password</label>
                 <div class="invalid-feedback">
                     Masukkan password.
@@ -191,7 +197,7 @@
                     Remember me
                 </label>
             </div>
-            <button class="btn btn-primary w-100 py-2" type="submit">Login</button>
+            <button class="btn btn-primary w-100 py-2" type="submit" name="submit_validate" value="abc">Login</button>
             <p class="mt-5 mb-3 text-body-secondary">&copy; 2022–2023</p>
         </form>
     </main>
