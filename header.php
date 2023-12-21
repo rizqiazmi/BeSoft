@@ -28,7 +28,6 @@
       </div>
       <div class="modal-body">
         <form class="needs-validation" novalidate action="proses/proses_ubah_password.php" method="POST">
-          <input type="hidden" value="<?php echo $row['id'] ?>" name="id">
           <div class="row">
             <div class="col-lg-6">
               <div class="form-floating mb-3">
