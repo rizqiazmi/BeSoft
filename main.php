@@ -36,7 +36,7 @@
       <!-- End Content -->
     </div>
 
-    <div class="fixed-bottom text-center mb-2">
+    <div class="fixed-bottom text-center bg-light py-2">
       Coptyright 2023 Markaz Virtual
     </div>
   </div>
