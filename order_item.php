@@ -1,12 +1,16 @@
 <?php
 include "proses/connect.php";
-$query = mysqli_query($conn, "SELECT tb_order.*,nama, SUM(harga*jumlah) AS harganya FROM tb_order 
-    LEFT JOIN tb_user ON tb_user.id = tb_order.pelayan
-    LEFT JOIN tb_list_order ON tb_list_order.order = tb_order.id_order
+
+$query = mysqli_query($conn, "SELECT *, SUM(harga*jumlah) AS harganya FROM tb_list_order 
+    LEFT JOIN tb_order ON tb_order.id_order = tb_list_order.order
     LEFT JOIN tb_daftar_menu ON tb_daftar_menu.id = tb_list_order.menu
-    GROUP BY id_order");
+    GROUP BY id_list_order
+    HAVING tb_list_order.order = $_GET[order]");
 while ($record = mysqli_fetch_array($query)) {
     $result[] = $record;
+    $kode = $record['kode_order'];
+    $meja = $record['meja'];
+    $pelanggan = $record['pelanggan'];
 }
 
 // $select_kat_menu = mysqli_query($conn, "SELECT id_kat_menu,kategori_menu FROM tb_kategori_menu");
@@ -14,12 +18,27 @@ while ($record = mysqli_fetch_array($query)) {
 <div class="col-lg-9 mt-2">
     <div class="card">
         <div class="card-header">
-            Halaman Order
+            Halaman Order Item
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col d-flex justify-content-end">
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalTambahUser"> Tambah Menu</button>
+                <div class="col-lg-3">
+                    <div class="form-floating mb-3">
+                        <input disabled type="text" class="form-control" id="kodeorder" value="<?php echo $kode; ?>">
+                        <label for="uploadFoto">Kode Order</label>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-floating mb-3">
+                        <input disabled type="text" class="form-control" id="meja" value="<?php echo $meja; ?>">
+                        <label for="uploadFoto">Meja</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-floating mb-3">
+                        <input disabled type="text" class="form-control" id="pelanggan" value="<?php echo $pelanggan; ?>">
+                        <label for="uploadFoto">Pelanggan</label>
+                    </div>
                 </div>
             </div>
 
@@ -317,46 +336,30 @@ while ($record = mysqli_fetch_array($query)) {
                     <table class="table table-hover">
                         <thead>
                             <tr class="text-nowrap">
-                                <th scope="col">No</th>
-                                <th scope="col">Kode Order</th>
-                                <th scope="col">Pelanggan</th>
-                                <th scope="col">Meja</th>
-                                <th scope="col">Total Harga</th>
-                                <th scope="col">Pelayan</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Waktu Order</th>
+                                <th scope="col">Menu</th>
+                                <th scope="col">Harga</th>
+                                <th scope="col">Qty</th>
+                                <th scope="col">Total</th>
                                 <th scope="col">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            $no = 1;
+                            $total = 0;
                             foreach ($result as $row) {
                             ?>
                                 <tr>
-                                    <th scope="row">
-                                        <?php echo $no++ ?>
-                                    </th>
                                     <td>
-                                        <?php echo $row['kode_order'] ?>
+                                        <?php echo $row['nama_menu'] ?>
                                     </td>
                                     <td>
-                                        <?php echo $row['pelanggan'] ?>
+                                        <?php echo number_format($row['harga'], 0, ',', '.'); ?>
                                     </td>
                                     <td>
-                                        <?php echo $row['meja'] ?>
+                                        <?php echo $row['jumlah'] ?>
                                     </td>
                                     <td>
-                                        <?php echo $row['harganya'] ?>
-                                    </td>
-                                    <td>
-                                        <?php echo $row['nama'] ?>
-                                    </td>
-                                    <td>
-                                        <?php echo $row['status'] ?>
-                                    </td>
-                                    <td>
-                                        <?php echo $row['waktu_order'] ?>
+                                        <?php echo number_format($row['harganya'], 0, ',', '.'); ?>
                                     </td>
                                     <td>
                                         <div class="d-flex">
@@ -367,10 +370,23 @@ while ($record = mysqli_fetch_array($query)) {
                                     </td>
                                 </tr>
                             <?php
+                                $total += $row['harganya'];
                             }
                             ?>
+                            <tr>
+                                <td colspan="3" class="fw-bold">
+                                    Total harga
+                                </td>
+                                <td class="fw-bold">
+                                    <?php echo number_format($total, 0, ',', '.'); ?>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
+                    <div>
+                        <button class="btn btn-success"><i class="bi bi-plus-circle-fill"></i> Item</button>
+                        <button class="btn btn-primary"><i class="bi bi-cash-coin"></i> Bayar</button>
+                    </div>
                 </div>
             <?php
             }
