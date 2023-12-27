@@ -9,6 +9,7 @@ if (!empty($_POST['submit_validate'])) {
     if ($hasil) {
         $_SESSION['username_besoft'] = $username;
         $_SESSION['level_besoft'] = $hasil['level'];
+        $_SESSION['id_besoft'] = $hasil['id'];
         header('location:../home');
     } else { ?>
         <script>

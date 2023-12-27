@@ -2,18 +2,22 @@
 include "proses/connect.php";
 
 $query = mysqli_query($conn, "SELECT *, SUM(harga*jumlah) AS harganya FROM tb_list_order 
-    LEFT JOIN tb_order ON tb_order.id_order = tb_list_order.order
+    LEFT JOIN tb_order ON tb_order.id_order = tb_list_order.kode_order
     LEFT JOIN tb_daftar_menu ON tb_daftar_menu.id = tb_list_order.menu
     GROUP BY id_list_order
-    HAVING tb_list_order.order = $_GET[order]");
+    HAVING tb_list_order.kode_order = $_GET[order]");
+
+$kode = $_GET['order'];
+$meja = $_GET['meja'];
+$pelanggan = $_GET['pelanggan'];
 while ($record = mysqli_fetch_array($query)) {
     $result[] = $record;
-    $kode = $record['kode_order'];
-    $meja = $record['meja'];
-    $pelanggan = $record['pelanggan'];
+    // $kode = $record['id_order'];
+    // $meja = $record['meja'];
+    // $pelanggan = $record['pelanggan'];
 }
 
-// $select_kat_menu = mysqli_query($conn, "SELECT id_kat_menu,kategori_menu FROM tb_kategori_menu");
+$select_menu = mysqli_query($conn, "SELECT id,nama_menu FROM tb_daftar_menu");
 ?>
 <div class="col-lg-9 mt-2">
     <div class="card">
@@ -21,6 +25,7 @@ while ($record = mysqli_fetch_array($query)) {
             Halaman Order Item
         </div>
         <div class="card-body">
+        <a href="order" class="btn btn-info mb-3"><i class="bi bi-arrow-left"></i></a>
             <div class="row">
                 <div class="col-lg-3">
                     <div class="form-floating mb-3">
@@ -42,8 +47,8 @@ while ($record = mysqli_fetch_array($query)) {
                 </div>
             </div>
 
-            <!-- Modal Tambah Menu Baru-->
-            <div class="modal fade" id="ModalTambahUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <!-- Modal Tambah Item Baru-->
+            <div class="modal fade" id="tambahItem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl modal-fullscreen-md-down">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -54,11 +59,18 @@ while ($record = mysqli_fetch_array($query)) {
                             <form class="needs-validation" novalidate action="proses/proses_input_menu.php" method="POST" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <div class="input-group mb-3">
-                                            <input type="file" class="form-control py-3" id="uploadFoto" placeholder="Your Name" name="foto" required>
-                                            <label class="input-group-text" for="uploadFoto">Upload Foto Menu</label>
+                                        <div class="form-floating mb-3">
+                                            <select class="form-select" name="menu" id="">
+                                                <option selected hidden value="">Pilih Menu</option>
+                                                <?php
+                                                    foreach($select_menu as $value){
+                                                        echo "<option value=$value.[id]>$value[nama_menu]</option>";
+                                                    }
+                                                ?>
+                                            </select>
+                                            <label for="menu">Menu Makanan/Minuman</label>
                                             <div class="invalid-feedback">
-                                                Masukkan File Foto Menu
+                                                Pilih Menu
                                             </div>
                                         </div>
                                     </div>
@@ -125,7 +137,7 @@ while ($record = mysqli_fetch_array($query)) {
                     </div>
                 </div>
             </div>
-            <!-- Akhir Modal Tambah Menu Baru-->
+            <!-- Akhir Modal Tambah Item Baru-->
 
             <?php
             if (empty($result)) {
@@ -383,14 +395,14 @@ while ($record = mysqli_fetch_array($query)) {
                             </tr>
                         </tbody>
                     </table>
-                    <div>
-                        <button class="btn btn-success"><i class="bi bi-plus-circle-fill"></i> Item</button>
-                        <button class="btn btn-primary"><i class="bi bi-cash-coin"></i> Bayar</button>
-                    </div>
                 </div>
             <?php
             }
             ?>
+            <div>
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#tambahItem"><i class="bi bi-plus-circle-fill"></i> Item</button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bayar"><i class="bi bi-cash-coin"></i> Bayar</button>
+            </div>
         </div>
     </div>
 </div>
