@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Dec 26, 2023 at 12:50 AM
+-- Generation Time: Dec 27, 2023 at 03:34 PM
 -- Server version: 5.7.39
 -- PHP Version: 8.2.0
 
@@ -82,9 +82,16 @@ INSERT INTO `tb_kategori_menu` (`id_kat_menu`, `jenis_menu`, `kategori_menu`) VA
 CREATE TABLE `tb_list_order` (
   `id_list_order` int(10) NOT NULL,
   `menu` int(10) NOT NULL,
-  `order` int(10) NOT NULL,
+  `kode_order` bigint(19) NOT NULL,
   `jumlah` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tb_list_order`
+--
+
+INSERT INTO `tb_list_order` (`id_list_order`, `menu`, `kode_order`, `jumlah`) VALUES
+(1, 5, 2312271954506, 3);
 
 -- --------------------------------------------------------
 
@@ -93,13 +100,22 @@ CREATE TABLE `tb_list_order` (
 --
 
 CREATE TABLE `tb_order` (
-  `id_order` int(10) NOT NULL,
+  `id_order` bigint(19) NOT NULL,
   `pelanggan` varchar(200) NOT NULL,
   `meja` int(10) NOT NULL,
   `pelayan` int(10) NOT NULL,
   `status` varchar(50) NOT NULL,
-  `waktu_order` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `waktu_order` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `catatan` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tb_order`
+--
+
+INSERT INTO `tb_order` (`id_order`, `pelanggan`, `meja`, `pelayan`, `status`, `waktu_order`, `catatan`) VALUES
+(2312271314918, 'Sambo', 1, 2, 'default_status', '2023-12-27 13:53:38', 'fa'),
+(2312271954506, 'gdf', 3, 2, 'default_status', '2023-12-27 12:54:48', 'dfd');
 
 -- --------------------------------------------------------
 
@@ -153,7 +169,7 @@ ALTER TABLE `tb_kategori_menu`
 ALTER TABLE `tb_list_order`
   ADD PRIMARY KEY (`id_list_order`),
   ADD KEY `menu` (`menu`),
-  ADD KEY `order` (`order`);
+  ADD KEY `order` (`kode_order`);
 
 --
 -- Indexes for table `tb_order`
@@ -188,7 +204,7 @@ ALTER TABLE `tb_kategori_menu`
 -- AUTO_INCREMENT for table `tb_list_order`
 --
 ALTER TABLE `tb_list_order`
-  MODIFY `id_list_order` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_list_order` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tb_user`
@@ -211,7 +227,7 @@ ALTER TABLE `tb_daftar_menu`
 --
 ALTER TABLE `tb_list_order`
   ADD CONSTRAINT `FK3` FOREIGN KEY (`menu`) REFERENCES `tb_daftar_menu` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `FK4` FOREIGN KEY (`order`) REFERENCES `tb_order` (`id_order`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK4` FOREIGN KEY (`kode_order`) REFERENCES `tb_order` (`id_order`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tb_order`
